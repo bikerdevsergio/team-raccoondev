@@ -1,0 +1,36 @@
+node_modules/
+.env
+*.env
+!.env.example
+
+# ─────────────────────────────────────────────────────────────────────────
+# CHECKLIST — credenciales/variables de entorno que el CEO debe completar
+# a mano en cada .env real (nunca se commitean, solo viven en tu máquina).
+# Cada agente tiene su propio .env en su propia carpeta. Se actualiza esta
+# lista a medida que se agregan nuevas funciones que requieren credenciales.
+# ─────────────────────────────────────────────────────────────────────────
+#
+# gg-raccoon/.env (Dante) — ver gg-raccoon/.env.example
+#   SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS
+#     → correo Gmail propio de Dante (redirigido vía Cloudflare), usado por
+#       escalate_to_ceo() para enviarte emails. SMTP_PASS = contraseña de
+#       aplicación de Gmail (no la contraseña normal de la cuenta).
+#   CEO_EMAIL
+#     → tu email (sergio.70s.sa@gmail.com), destino de esos emails.
+#   ANTHROPIC_API_KEY
+#     → API key de Claude (console.anthropic.com), usada por meeting_notes()
+#       Modo 1 para procesar transcripciones.
+#   NEO4J_URI / NEO4J_USER / NEO4J_PASSWORD
+#     → credenciales de tu instancia Neo4j AuraDB (free tier), usadas por
+#       graphrag_sync() para el nodo de memoria de Dante.
+#
+# Pendiente de definir (todavía NO hay .env ni código para esto):
+#   - finance-lead/.env, fullstack-dev/.env, legal-lead/.env, marketing-lead/.env
+#     → cada uno va a necesitar su propio SMTP_USER/SMTP_PASS (su Gmail propio
+#       vía Cloudflare) una vez que se construya ese agente.
+#   - PWA (Sala de Reuniones, Modo 2 de meeting_notes)
+#     → credenciales de integración Google Meet (OAuth client id/secret) —
+#       se define cuando se llegue a ese módulo, no antes.
+#   - PWA (hosting/deploy)
+#     → todavía no hay decisión de dónde se despliega la PWA (Vercel, Cloudflare
+#       Pages, etc.) ni qué credenciales necesita eso.
