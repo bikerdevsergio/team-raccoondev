@@ -1,0 +1,7 @@
+{
+  "agent": "finance-lead",
+  "state": "idle",
+  "currentTask": null,
+  "lastUpdated": "2026-10-15T18:42:35.802Z",
+  "pendingExpenseEscalations": 0
+}

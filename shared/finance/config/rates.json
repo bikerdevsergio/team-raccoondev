@@ -1,0 +1,7 @@
+{
+  "_comment": "Tarifas estándar por rol en USD/hora. Editable a mano, sin tocar código. project_cost_estimate() las usa cuando project.laborHours no trae hourlyRate explícito para un rol.",
+  "CEO": 150,
+  "dev": 60,
+  "diseño": 45,
+  "consultoría": 80
+}

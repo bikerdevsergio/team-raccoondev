@@ -1,0 +1,8 @@
+{
+  "_comment": "Servicios activos con costo mensual estimado en USD. Editable a mano. alertThreshold opcional: si el costo real supera esto, service_inventory() lo marca.",
+  "services": [
+    { "name": "Claude API", "provider": "Anthropic", "monthlyCost": 0, "alertThreshold": 200 },
+    { "name": "Neo4j AuraDB", "provider": "Neo4j", "monthlyCost": 0, "alertThreshold": 50 },
+    { "name": "VPS", "provider": "—", "monthlyCost": 0, "alertThreshold": 100 }
+  ]
+}

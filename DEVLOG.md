@@ -59,3 +59,62 @@ El CEO aprobó 10 funciones para Dante (ver `gg-raccoon/AGENT.md` para el detall
 - El CEO corrigió el enfoque de `status_panel_mod`: no debe generar un HTML separado (`status_panel.html` fue eliminado). En su lugar, escribe todos los datos del panel (estado del equipo, aprobaciones pendientes, escalaciones, conflictos congelados) directamente en `shared/status/gg-raccoon.json`.
 - **Razón:** la futura PWA es la que va a leer ese JSON y renderizarlo visualmente — generar HTML por separado duplicaba responsabilidad que le corresponde a la PWA.
 - Función renombrada de `renderStatusPanel()` a `updateStatusPanel()` para reflejar que ya no "renderiza", solo actualiza estado.
+
+## 2026-10-15 — Agente 2: Midas (finance-lead) iniciado
+- El CEO definió identidad y 18 funciones aprobadas para Midas (finance-lead), Lead de Finanzas. Reporta a Sergi, coordina con Dante.
+- Función 1/18 `track_expense(entry)` codeada y probada: registra gastos en `shared/finance/expenses.json`.
+
+## 2026-10-15 — Midas: funciones 2-4 codeadas, moneda base y umbral definidos
+- Funciones 2/18 (`track_income`), 3/18 (`budget_report`) y 4/18 (`flag_large_expense`) codeadas y probadas.
+- `flag_large_expense` respeta la regla de "solo JSON compartido entre agentes": escribe directo en `shared/escalations.json` con el mismo formato que usa `escalate_to_ceo` de Dante, sin importar su código.
+- El CEO definió: moneda base del sistema = **USD** (todos los montos se registran en USD), y agregó `BASE_CURRENCY` + `EXPENSE_THRESHOLD` a `finance-lead/.env.example`.
+
+## 2026-10-15 — Midas: función 5/18 payment_reminder + firma de marca cara al cliente
+- Función 5/18 `payment_reminder(invoice)` codeada: envía recordatorio de pago vía SMTP propio de Midas.
+- **Regla de marca:** cualquier email a un cliente firma como "Equipo RaccoonDev", nunca con el nombre del agente (Midas es interno, el cliente no debe saber que es un agente). Aplica a toda comunicación externa, no solo a esta función.
+- `npm install nodemailer dotenv` en `finance-lead/` — se repitió el mismo problema de versión vulnerable que en Dante, fijado a `nodemailer@^10.1.1` (0 vulnerabilidades).
+
+## 2026-10-15 — Midas: función 6/18 generate_invoice con PDF real
+- Función 6/18 `generate_invoice(data)` codeada: genera factura en PDF (vía `pdfkit`, el documento que se envía al cliente) además de `.txt`/`.json` como registro interno.
+- `npm install pdfkit` en `finance-lead/` — 0 vulnerabilidades.
+
+## 2026-10-15 — Midas: función 7/18 tax_summary codeada
+- Función 7/18 `tax_summary(period)` codeada y probada: compila ingreso total, gasto deducible por categoría y base imponible estimada de un período, para pasarle al contador. Asume todos los gastos registrados como deducibles (nota aclaratoria en el output — requiere revisión del contador según normativa).
+
+## 2026-10-15 — Midas: función 8/18 sync_status codeada
+- Función 8/18 `sync_status()` codeada y probada: escribe `shared/status/finance-lead.json` (estado + escalaciones de gasto propias pendientes), mismo archivo que lee `check_agent_status()` de Dante.
+
+## 2026-10-15 — Midas: función 9/18 graphrag_sync codeada
+- Función 9/18 `graphrag_sync()` codeada: usa la misma instancia Neo4j AuraDB que Dante, nodo `Agent {name: "midas"}` separado. `npm install neo4j-driver` en `finance-lead/` — 0 vulnerabilidades. Probado que falla con mensaje claro sin credenciales.
+
+## 2026-10-15 — Midas: función 10/18 project_cost_estimate + tarifas estándar
+- Función 10/18 `project_cost_estimate(project)` codeada y probada: costo de mano de obra + costos fijos + precio sugerido según margen.
+- Se agregó `shared/finance/config/rates.json` con tarifas estándar por rol (CEO, dev, diseño, consultoría) en USD/hora, editable sin tocar código. Si `laborHours` no trae `hourlyRate`, se busca ahí automáticamente.
+
+## 2026-10-15 — Midas: función 11/18 rentability_check codeada
+- Función 11/18 `rentability_check(project)` codeada y probada: calcula margen real vs mínimo aceptable; si no alcanza, cancela el proyecto por default y escala a CEO vía `shared/escalations.json` (requiere aprobación explícita para seguir).
+
+## 2026-10-15 — Midas: función 12/18 service_inventory codeada
+- Función 12/18 `service_inventory()` codeada y probada: lee `shared/finance/config/services.json` (seed inicial con Claude API, Neo4j AuraDB, VPS en 0 — costos reales a completar por el CEO), calcula total mensual y alertas por umbral.
+
+## 2026-10-15 — Midas: clientId obligatorio, función 13/18 portfolio_manager
+- El CEO pidió agregar `clientId` como campo obligatorio en `track_income`, `generate_invoice` y `portfolio_manager`, para que el matching de pagos a cliente sea por ID y no por nombre/texto (evita falsos matches). Se actualizaron `trackIncome.js` y `generateInvoice.js` para exigirlo.
+- Función 13/18 `portfolio_manager()` codeada y probada: agrega facturación, pagos y deuda pendiente por `clientId`, guarda snapshot en `shared/finance/portfolio.json`.
+
+## 2026-10-15 — Midas: función 14/18 suspend_service codeada
+- Función 14/18 `suspend_service(client)` codeada y probada: consulta la deuda del cliente vía `portfolio_manager` y escala la propuesta de suspensión a CEO — nunca ejecuta nada por sí sola (no existe todavía un sistema real de accesos/servicios de cliente para suspender).
+
+## 2026-10-15 — Midas: función 15/18 payroll codeada
+- Función 15/18 `payroll()` codeada y probada: como no hay integración bancaria real, Midas no transfiere dinero — propone el pago en COP a Sergi, escala para confirmación manual, y guarda el plan de RaccoonCoins para distribuir una vez exista `raccoin_ledger` (función 16).
+
+## 2026-10-15 — Midas: función 16/18 raccoin_ledger codeada
+- Función 16/18 `raccoin_ledger(agent, amount)` codeada y probada: ledger de RaccoonCoins en `shared/finance/raccoin_ledger.json`, balances + historial de transacciones por agente. Sin valor monetario real, sin conversión a dinero, nunca permite balance negativo.
+
+## 2026-10-15 — Midas: función 17/18 financial_growth codeada
+- Función 17/18 `financial_growth()` codeada y probada: calcula colchón acumulado (ingresos - gastos de todo el historial) y lo compara contra el snapshot anterior guardado en `shared/finance/growth_history.json`.
+
+## 2026-10-15 — Midas completo: 18/18 funciones codeadas, segundo agente del sistema
+- Función 18/18 `meeting_presence(transcript_chunk)` codeada: usa Claude API (`claude-sonnet-4-6`, salida estructurada) para detectar implicaciones financieras en un fragmento de reunión, y si corresponde, escala vía `shared/escalations.json` — comunica a Dante sin llamada directa entre agentes.
+- `npm install @anthropic-ai/sdk zod` en `finance-lead/` — 0 vulnerabilidades. Probado que falla con mensaje claro sin `ANTHROPIC_API_KEY`.
+- **Con esto, las 18 funciones aprobadas para Midas (finance-lead) están codeadas.** Midas queda completo como segundo agente del sistema.
+- **Próximo paso:** construir el agente 3 (fullstack-dev / Code) siguiendo el mismo proceso.
