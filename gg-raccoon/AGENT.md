@@ -19,14 +19,14 @@
 | 7 | `meeting_notes(input)` | **Modo 1** (post-reunión, codeado): procesa la transcripción completa con Claude API (`claude-sonnet-4-6`, salida estructurada) y extrae requisitos, riesgos, implícitos y preguntas de seguimiento. **Modo 2** (en vivo, solo arquitectura/placeholder, NO codeado): procesará chunks por WebSocket con streaming cuando exista la Sala de Reuniones. | ✅ Modo 1 codeado / Modo 2 placeholder |
 | 8 | `weekly_team_review()` | Compila el estado semanal del equipo: tareas por estado (inbox), bloqueos (conflictos congelados + escalaciones pendientes) e highlights (DEVLOG de los últimos 7 días) por agente | ✅ codeado |
 | 9 | `graphrag_sync()` | Lee/escribe el nodo de memoria GraphRAG de Dante en Neo4j AuraDB (decisiones y tareas como grafo, no logs completos) | ✅ codeado |
-| 10 | `status_panel_mod` | Mod que genera un dashboard HTML (cyberpunk/dark) con el estado del equipo, aprobaciones pendientes, escalaciones y conflictos congelados de Dante | ✅ codeado |
+| 10 | `status_panel_mod` | Mod que actualiza `shared/status/gg-raccoon.json` con el estado del equipo, aprobaciones pendientes, escalaciones y conflictos congelados de Dante (la PWA lo leerá y mostrará visualmente cuando exista) | ✅ codeado |
 
 Cada función se codea una por una, en el orden listado arriba, y se muestra el código al CEO antes de darla por finalizada.
 
 **Las 10 funciones aprobadas están codeadas.** Dante queda completo como primer agente del sistema.
 
 ## Mod de estado (status_panel_mod)
-`mods/statusPanel.js` → `renderStatusPanel()` agrega estado del equipo (`check_agent_status`), aprobaciones pendientes (`approval_queue`), escalaciones (`escalate_to_ceo`) y conflictos congelados (`conflict_resolver`) en un snapshot HTML (`mods/status_panel.html`), estética cyberpunk/dark — semilla visual de la futura recepción de la PWA. Se regenera llamando a la función de nuevo.
+`mods/statusPanel.js` → `updateStatusPanel()` agrega estado del equipo (`check_agent_status`), aprobaciones pendientes (`approval_queue`), escalaciones (`escalate_to_ceo`) y conflictos congelados (`conflict_resolver`) y los escribe en `shared/status/gg-raccoon.json`. No genera HTML — la PWA, cuando exista, lee ese JSON y lo renderiza visualmente en la recepción de Dante.
 
 ## Memoria (GraphRAG)
 `graphrag_sync()` usa **Neo4j AuraDB** (free tier cloud) como grafo de memoria de Dante — decisión del CEO. Esquema: nodos `Agent`, `Decision`, `Task`; relaciones `MADE_BY`, `ASSIGNED_TO`, `RELATED_TO`. Guarda decisiones y tareas, no el historial completo de conversación. Credenciales en `gg-raccoon/.env` (`NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD`), ver `.env.example`. Igual que con `ANTHROPIC_API_KEY`, falla explícitamente si faltan — no hay "modo degradado" razonable para la memoria.

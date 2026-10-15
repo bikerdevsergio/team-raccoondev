@@ -54,3 +54,8 @@ El CEO aprobó 10 funciones para Dante (ver `gg-raccoon/AGENT.md` para el detall
 - Con esto, **las 10 funciones aprobadas para Dante están codeadas**. Dante (gg-raccoon) queda completo como primer agente del sistema.
 - Publicado como artifact para revisión visual: https://claude.ai/artifact/JiUk6Rn6a8uAezhqNcq9ch
 - **Próximo paso:** construir el agente 2 (finance-lead) siguiendo el mismo proceso — proponer nombre y funciones, esperar aprobación del CEO antes de codear.
+
+## 2026-10-15 — status_panel_mod: corrección de enfoque (JSON, no HTML)
+- El CEO corrigió el enfoque de `status_panel_mod`: no debe generar un HTML separado (`status_panel.html` fue eliminado). En su lugar, escribe todos los datos del panel (estado del equipo, aprobaciones pendientes, escalaciones, conflictos congelados) directamente en `shared/status/gg-raccoon.json`.
+- **Razón:** la futura PWA es la que va a leer ese JSON y renderizarlo visualmente — generar HTML por separado duplicaba responsabilidad que le corresponde a la PWA.
+- Función renombrada de `renderStatusPanel()` a `updateStatusPanel()` para reflejar que ya no "renderiza", solo actualiza estado.
