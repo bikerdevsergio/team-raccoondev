@@ -118,3 +118,44 @@ El CEO aprobó 10 funciones para Dante (ver `gg-raccoon/AGENT.md` para el detall
 - `npm install @anthropic-ai/sdk zod` en `finance-lead/` — 0 vulnerabilidades. Probado que falla con mensaje claro sin `ANTHROPIC_API_KEY`.
 - **Con esto, las 18 funciones aprobadas para Midas (finance-lead) están codeadas.** Midas queda completo como segundo agente del sistema.
 - **Próximo paso:** construir el agente 3 (fullstack-dev / Code) siguiendo el mismo proceso.
+
+## 2026-10-16 — Agente 3: Volt (fullstack-dev) iniciado
+- El CEO definió identidad y 12 funciones aprobadas para Volt (fullstack-dev), CTO. Reporta a Sergi, coordina con Dante y Midas.
+- **Regla fundamental:** ciclo obligatorio REQUISITOS → DISEÑO → DESARROLLO → QA → PRODUCCIÓN (`src/lib/devCycle.js`). Ningún salto de fase sin aprobación explícita del CEO; un intento de salto se congela y escala vía `shared/escalations.json`.
+- Función 1/12 `create_task(spec)` codeada y probada: crea tareas en `shared/inbox/fullstack-dev/` siempre en fase "requisitos"; detecta y congela intentos de salto de fase en la creación.
+
+## 2026-10-16 — Volt: función 2/12 run_tests codeada
+- Función 2/12 `run_tests(target)` codeada y probada (caso pass y fail): ejecuta un comando (default `npm test`) en el directorio del proyecto, captura stdout/stderr/exit code, guarda resultado en `shared/test_results/`.
+
+## 2026-10-16 — Volt: función 3/12 code_review codeada
+- Función 3/12 `code_review(diff)` codeada: usa Claude API (`claude-sonnet-4-6`, salida estructurada) para revisar un diff/PR buscando bugs, seguridad y simplificaciones. `npm install @anthropic-ai/sdk zod dotenv` en `fullstack-dev/` — 0 vulnerabilidades. Probado que falla con mensaje claro sin `ANTHROPIC_API_KEY`.
+
+## 2026-10-16 — Volt: función 4/12 deploy codeada
+- Función 4/12 `deploy(target, environment)` codeada y probada (staging ejecuta, producción congela y escala): comandos por proyecto/ambiente en `shared/dev/deploy_configs.json` (seed vacío, editable a mano). Producción NUNCA se ejecuta automáticamente.
+
+## 2026-10-16 — Volt: función 5/12 bug_tracker codeada
+- Función 5/12 `bug_tracker(entry)` codeada y probada: registra bugs en `shared/bugs/bugs.json` con severidad (low/medium/high/critical), proyecto y estado "open".
+
+## 2026-10-16 — Volt: función 6/12 dependency_audit codeada
+- Función 6/12 `dependency_audit()` codeada y probada contra los 3 agentes reales existentes: 0 vulnerabilidades en gg-raccoon, finance-lead y fullstack-dev; legal-lead/marketing-lead marcados "skipped" (todavía no construidos). Reporte real en `shared/dev/dependency_audit.json`.
+
+## 2026-10-16 — Volt: función 7/12 scaffold_project codeada
+- Función 7/12 `scaffold_project(spec)` codeada y probada: crea estructura base de proyecto (carpetas, package.json, README) en `shared/dev/projects/<name>/` y registra la tarea inicial en fase "requisitos" reutilizando `create_task`.
+
+## 2026-10-16 — Volt: función 8/12 api_health_check codeada
+- Función 8/12 `api_health_check()` codeada y probada (sin credenciales → los 3 servicios reportan "not_configured", sin escalar falsos positivos). Chequea Claude API, Neo4j AuraDB y SMTP; solo escala a CEO si un servicio configurado falla de verdad.
+- Se agregaron libs `fullstack-dev/src/lib/mailer.js` y `neo4jClient.js` (mismo patrón que Dante/Midas), reutilizables por `graphrag_sync` (función 10) cuando se apruebe. `npm install nodemailer@^10.1.1 neo4j-driver` — 0 vulnerabilidades.
+
+## 2026-10-16 — Volt: función 9/12 sync_status codeada
+- Función 9/12 `sync_status()` codeada y probada: escribe `shared/status/fullstack-dev.json` (estado, escalaciones propias pendientes, bugs abiertos), mismo archivo que lee `check_agent_status()` de Dante.
+
+## 2026-10-16 — Volt: función 10/12 graphrag_sync codeada
+- Función 10/12 `graphrag_sync()` codeada: usa la misma instancia Neo4j AuraDB que Dante/Midas, nodo `Agent {name: "volt"}` separado. Probado que falla con mensaje claro sin credenciales.
+
+## 2026-10-16 — Volt: función 11/12 tech_debt_report codeada
+- Función 11/12 `tech_debt_report()` codeada y probada: ledger acumulativo en `shared/tech_debt.json`, acepta agregar un ítem nuevo opcional y siempre devuelve el reporte agrupado por proyecto.
+
+## 2026-10-16 — Volt completo: 12/12 funciones codeadas, tercer agente del sistema
+- Función 12/12 `meeting_presence(transcript_chunk)` codeada y probada: usa Claude API (`claude-sonnet-4-6`) para detectar implicaciones técnicas en reuniones y escala vía `shared/escalations.json`.
+- **Con esto, las 12 funciones aprobadas para Volt (fullstack-dev) están codeadas.** Volt queda completo como tercer agente del sistema.
+- **Próximo paso:** construir el agente 4 (legal-lead) siguiendo el mismo proceso.

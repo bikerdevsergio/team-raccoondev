@@ -1,0 +1,1 @@
+{"_comment":"Config de deploy por proyecto. Editable a mano. El comando de producción NUNCA se ejecuta automáticamente — deploy() siempre escala a CEO antes.","projects":{}}

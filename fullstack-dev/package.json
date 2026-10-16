@@ -1,0 +1,14 @@
+{
+  "name": "fullstack-dev",
+  "version": "0.1.0",
+  "description": "Volt — CTO de RaccoonDev",
+  "type": "module",
+  "main": "src/index.js",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
+    "dotenv": "^18.0.8",
+    "neo4j-driver": "^6.2.0",
+    "nodemailer": "^10.1.2",
+    "zod": "^4.6.7"
+  }
+}
