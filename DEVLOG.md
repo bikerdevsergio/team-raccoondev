@@ -201,3 +201,47 @@ El CEO aprobó 10 funciones para Dante (ver `gg-raccoon/AGENT.md` para el detall
 - Función 11/11 `meeting_presence(transcript_chunk)` codeada y probada: Claude API (`claude-sonnet-4-6`) para detectar implicaciones legales en reuniones, escala vía `shared/escalations.json`.
 - **Con esto, las 11 funciones aprobadas para Themis (legal-lead) están codeadas.** Themis queda completa como cuarto agente del sistema.
 - **Próximo paso:** construir el agente 5 y último (marketing-lead) siguiendo el mismo proceso.
+
+## 2026-10-17 — Agente 5 (último): Hermes (marketing-lead) iniciado
+- El CEO definió identidad y 11 funciones aprobadas para Hermes (marketing-lead), Lead de Marketing. Reporta a Sergi, coordina con Dante, Midas y Themis.
+- Función 1/11 `draft_post(spec)` codeada y probada: genera copy para redes/blog vía Claude API, por canal (instagram/linkedin/twitter/blog), con validación de canal y guía de estilo por canal.
+- `npm install @anthropic-ai/sdk dotenv` en `marketing-lead/` — 0 vulnerabilidades.
+
+## 2026-10-17 — Hermes: función 2/11 brand_voice_check codeada
+- Función 2/11 `brand_voice_check(text)` codeada: evalúa un texto contra `shared/marketing/config/brand_voice.json` (tono, palabras a evitar, estilo preferido — editable a mano) vía Claude API.
+- `npm install zod` en `marketing-lead/` (ya estaba pre-aprobado en el stack acordado) — 0 vulnerabilidades.
+
+## 2026-10-17 — Hermes: función 3/11 content_calendar codeada
+- Función 3/11 `content_calendar(entry)` codeada y probada: calendario en `shared/marketing/content_calendar.json`, admite agregar entrada nueva, calcula próximos 7 días.
+
+## 2026-10-17 — Hermes: función 4/11 campaign_tracker codeada (primera coordinación real entre agentes)
+- Función 4/11 `campaign_tracker(entry)` codeada y probada: registra la campaña en `shared/marketing/campaigns.json`, y el presupuesto también en `shared/finance/expenses.json` (categoría `marketing-campaña`) — sin llamar directo al código de Midas.
+- **Probado end-to-end:** el gasto de una campaña de Hermes aparece correctamente en `budget_report()` de Midas. Primera verificación real de que la arquitectura "solo JSON compartido entre agentes" funciona entre dos agentes distintos.
+
+## 2026-10-17 — Hermes: función 5/11 lead_capture codeada
+- Función 5/11 `lead_capture(entry)` codeada y probada: registra leads entrantes (nombre, contacto, fuente, interés) en `shared/marketing/leads.json` con estado "new".
+
+## 2026-10-17 — Hermes: función 6/11 seo_audit codeada (con fix de compatibilidad)
+- Función 6/11 `seo_audit(url)` codeada: hace fetch a una URL, extrae título/meta tags/headings vía `cheerio`, analiza oportunidades SEO vía Claude API.
+- `npm install cheerio` en `marketing-lead/` — 0 vulnerabilidades (solo un warning de deprecación en una dependencia transitiva, no es de seguridad).
+- **Bug de compatibilidad encontrado y resuelto:** `cheerio` → `undici` requiere el global `File`, que Node 18.20 no expone por defecto (sí existe en `node:buffer` desde 18.13). Se agregó `src/lib/filePolyfill.js` que lo registra como global antes de importar `cheerio`. Sin esto, cualquier función que use `cheerio` rompía con `ReferenceError: File is not defined`.
+
+## 2026-10-17 — Hermes: función 7/11 flag_brand_risk codeada
+- Función 7/11 `flag_brand_risk(description)` codeada y probada: congela y escala cualquier riesgo de marca vía `shared/escalations.json`, mismo patrón que `flag_legal_risk` de Themis.
+
+## 2026-10-17 — Hermes: función 8/11 generate_proposal codeada
+- Función 8/11 `generate_proposal(spec)` codeada y probada: genera propuesta comercial vía Claude API, exporta a .docx + .pdf (LibreOffice, mismo patrón que Themis). Si se pasa `costEstimateId`, lee el estimado real de `project_cost_estimate()` de Midas desde `shared/finance/cost_estimates/` en vez de inventar cifras — segunda coordinación real entre agentes vía JSON compartido.
+- `npm install docx` en `marketing-lead/` — 0 vulnerabilidades.
+
+## 2026-10-17 — Hermes: función 9/11 sync_status codeada
+- Función 9/11 `sync_status()` codeada y probada: escribe `shared/status/marketing-lead.json` (estado, escalaciones propias, leads nuevos), mismo archivo que lee `check_agent_status()` de Dante.
+
+## 2026-10-17 — Hermes: función 10/11 graphrag_sync codeada
+- Función 10/11 `graphrag_sync()` codeada: misma instancia Neo4j AuraDB que los otros agentes, nodo `Agent {name: "hermes"}`. Probado que falla con mensaje claro sin credenciales.
+- Se creó `marketing-lead/.env.example` (se había pasado por alto al iniciar el agente) con SMTP, CEO_EMAIL, ANTHROPIC_API_KEY y NEO4J_*.
+
+## 2026-10-17 — Hermes completo: 11/11 funciones codeadas — LOS 5 AGENTES DEL SISTEMA ESTÁN COMPLETOS
+- Función 11/11 `meeting_presence(transcript_chunk)` codeada y probada: Claude API (`claude-sonnet-4-6`) para detectar implicaciones de marketing en reuniones, escala vía `shared/escalations.json`.
+- **Con esto, las 11 funciones aprobadas para Hermes (marketing-lead) están codeadas.** Hermes queda completo como quinto y último agente del sistema.
+- **Hito del proyecto:** los 5 agentes definidos al inicio (Dante, Midas, Volt, Themis, Hermes) están completos, probados y documentados — gg-raccoon (10/10), finance-lead (18/18), fullstack-dev (12/12), legal-lead (11/11), marketing-lead (11/11). Total: 62 funciones aprobadas y codeadas.
+- **Próximo paso (fuera del alcance de este sprint de agentes):** construcción de la PWA — arranca después de que los 5 agentes estén completos, según lo definido al inicio del proyecto.

@@ -1,0 +1,6 @@
+{
+  "_comment": "Definición del tono de marca de RaccoonDev. Editable a mano — brand_voice_check() la usa para evaluar textos.",
+  "tone": "Profesional pero cercano, directo, sin jerga corporativa vacía. Hablamos como una consultora tech moderna que resuelve problemas reales, no como una agencia que vende humo.",
+  "avoidWords": ["sinergia", "disruptivo", "revolucionario", "paradigma", "ecosistema de soluciones"],
+  "preferredStyle": "Oraciones cortas, voz activa, ejemplos concretos antes que abstracciones."
+}

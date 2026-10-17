@@ -1,0 +1,8 @@
+{
+  "agent": "marketing-lead",
+  "state": "idle",
+  "currentTask": null,
+  "lastUpdated": "2026-10-17T00:38:08.038Z",
+  "pendingEscalations": 0,
+  "newLeads": 0
+}

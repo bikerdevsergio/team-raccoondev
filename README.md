@@ -6,6 +6,8 @@ Sistema multi-agente autónomo para una consultora low-code. Cada agente es un m
 
 RaccoonDev funciona como una empresa de software operada por agentes: un Gerente General que orquesta, y leads especializados en finanzas, desarrollo, legal y marketing. El objetivo es que el equipo pueda operar 24/7 sin depender de la disponibilidad del CEO, con trazabilidad completa de cada decisión.
 
+**Los 5 agentes del sistema están completos** (62 funciones aprobadas y codeadas en total). Sigue la construcción de la PWA.
+
 ## Agentes
 
 | Agente | Carpeta | Rol | Estado |
@@ -14,12 +16,12 @@ RaccoonDev funciona como una empresa de software operada por agentes: un Gerente
 | **Midas** | [`finance-lead/`](finance-lead/) | Lead de Finanzas | ✅ completo (18/18 funciones) |
 | **Volt** | [`fullstack-dev/`](fullstack-dev/) | CTO — Lead de Desarrollo | ✅ completo (12/12 funciones) |
 | **Themis** | [`legal-lead/`](legal-lead/) | Lead Legal | ✅ completo (11/11 funciones) |
-| — | `marketing-lead/` | Lead de Marketing | pendiente |
+| **Hermes** | [`marketing-lead/`](marketing-lead/) | Lead de Marketing | ✅ completo (11/11 funciones) |
 
 ## Cómo funciona
 
 - **Propuesta → aprobación → código.** Para cada agente se proponen nombre y funciones candidatas; el CEO aprueba o rechaza cada una antes de que se escriba una sola línea. Lo aprobado queda en `<agente>/AGENT.md`, lo rechazado (con la razón) en `<agente>/REJECTED.md`.
-- **Memoria en nodos (GraphRAG).** Cada agente tiene su propio nodo de memoria — decisiones y tareas, no el historial completo de conversación. Dante, Midas, Volt y Themis usan la misma instancia de Neo4j AuraDB, con nodos separados por agente.
+- **Memoria en nodos (GraphRAG).** Cada agente tiene su propio nodo de memoria — decisiones y tareas, no el historial completo de conversación. Los 5 agentes usan la misma instancia de Neo4j AuraDB, con nodos separados por agente.
 - **Comunicación por archivos JSON compartidos.** Los agentes se coordinan vía `shared/` (inbox de tareas, cola de aprobaciones, escalaciones, conflictos, estado por agente) — sin llamadas API directas entre ellos todavía.
 - **Todo queda documentado.** Cada decisión, cambio o bug se registra en [`DEVLOG.md`](DEVLOG.md), en orden cronológico.
 
