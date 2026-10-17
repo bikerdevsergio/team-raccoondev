@@ -13,13 +13,13 @@ RaccoonDev funciona como una empresa de software operada por agentes: un Gerente
 | **Dante** | [`gg-raccoon/`](gg-raccoon/) | Gerente General — orquestador + secretario | ✅ completo (10/10 funciones) |
 | **Midas** | [`finance-lead/`](finance-lead/) | Lead de Finanzas | ✅ completo (18/18 funciones) |
 | **Volt** | [`fullstack-dev/`](fullstack-dev/) | CTO — Lead de Desarrollo | ✅ completo (12/12 funciones) |
-| — | `legal-lead/` | Lead Legal | pendiente |
+| **Themis** | [`legal-lead/`](legal-lead/) | Lead Legal | ✅ completo (11/11 funciones) |
 | — | `marketing-lead/` | Lead de Marketing | pendiente |
 
 ## Cómo funciona
 
 - **Propuesta → aprobación → código.** Para cada agente se proponen nombre y funciones candidatas; el CEO aprueba o rechaza cada una antes de que se escriba una sola línea. Lo aprobado queda en `<agente>/AGENT.md`, lo rechazado (con la razón) en `<agente>/REJECTED.md`.
-- **Memoria en nodos (GraphRAG).** Cada agente tiene su propio nodo de memoria — decisiones y tareas, no el historial completo de conversación. Dante, Midas y Volt usan la misma instancia de Neo4j AuraDB, con nodos separados por agente.
+- **Memoria en nodos (GraphRAG).** Cada agente tiene su propio nodo de memoria — decisiones y tareas, no el historial completo de conversación. Dante, Midas, Volt y Themis usan la misma instancia de Neo4j AuraDB, con nodos separados por agente.
 - **Comunicación por archivos JSON compartidos.** Los agentes se coordinan vía `shared/` (inbox de tareas, cola de aprobaciones, escalaciones, conflictos, estado por agente) — sin llamadas API directas entre ellos todavía.
 - **Todo queda documentado.** Cada decisión, cambio o bug se registra en [`DEVLOG.md`](DEVLOG.md), en orden cronológico.
 
