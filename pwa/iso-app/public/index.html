@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>RaccoonDev HQ — prueba isométrica</title>
+<style>
+  body { margin: 0; background: #0b0c14; }
+</style>
+<script src="/vendor/pixi.min.js"></script>
+<script src="/vendor/traviso.min.js"></script>
+</head>
+<body>
+<script>
+  const pixiRoot = new PIXI.Application({ width: 800, height: 600, backgroundColor: 0x0b0c14 });
+  document.body.appendChild(pixiRoot.view);
+
+  const instanceConfig = {
+    mapDataPath: "mapData.json",
+    assetsToLoad: ["assets/t_floor.png", "assets/o_desk.png", "assets/hero_stand_se_0001.png", "assets/tileHighlight.png"],
+  };
+
+  const engine = TRAVISO.getEngineInstance(instanceConfig);
+  pixiRoot.stage.addChild(engine);
+</script>
+</body>
+</html>

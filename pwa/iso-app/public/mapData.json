@@ -1,0 +1,36 @@
+{
+  "tiles": {
+    "1": { "movable": true, "path": "assets/t_floor.png" }
+  },
+  "objects": {
+    "1": {
+      "movable": false, "interactive": false, "rowSpan": 1, "columnSpan": 1, "noTransparency": false, "floor": false,
+      "visuals": { "idle": { "frames": [{ "path": "assets/o_desk.png" }] } }
+    },
+    "2": {
+      "movable": true, "interactive": true, "rowSpan": 1, "columnSpan": 1, "noTransparency": true, "floor": false,
+      "visuals": {
+        "idle": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
+        "idle_se": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
+        "move_se": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
+        "move_ne": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
+        "move_sw": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
+        "move_nw": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] }
+      }
+    }
+  },
+  "initialControllableLocation": { "columnIndex": 2, "rowIndex": 2, "controllableId": "2" },
+  "tileHighlightImage": { "path": "assets/tileHighlight.png" },
+  "groundMap": [
+    { "row": "1,1,1,1" },
+    { "row": "1,1,1,1" },
+    { "row": "1,1,1,1" },
+    { "row": "1,1,1,1" }
+  ],
+  "objectsMap": [
+    { "row": "0,0,0,0" },
+    { "row": "0,1,0,0" },
+    { "row": "0,0,2,0" },
+    { "row": "0,0,0,0" }
+  ]
+}
