@@ -10,12 +10,15 @@
     "2": {
       "movable": true, "interactive": true, "rowSpan": 1, "columnSpan": 1, "noTransparency": true, "floor": false,
       "visuals": {
-        "idle": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
-        "idle_se": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
-        "move_se": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
-        "move_ne": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
-        "move_sw": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] },
-        "move_nw": { "frames": [{ "path": "assets/hero_stand_se_0001.png" }] }
+        "idle": { "frames": [{ "path": "assets/characters/dante/dante_stand_se.png" }] },
+        "idle_se": { "frames": [{ "path": "assets/characters/dante/dante_stand_se.png" }] },
+        "idle_sw": { "frames": [{ "path": "assets/characters/dante/dante_stand_sw.png" }] },
+        "idle_nw": { "frames": [{ "path": "assets/characters/dante/dante_stand_nw.png" }] },
+        "idle_ne": { "frames": [{ "path": "assets/characters/dante/dante_stand_ne.png" }] },
+        "move_se": { "frames": [{ "path": "assets/characters/dante/dante_walk_se.png" }] },
+        "move_sw": { "frames": [{ "path": "assets/characters/dante/dante_walk_sw.png" }] },
+        "move_nw": { "frames": [{ "path": "assets/characters/dante/dante_walk_nw.png" }] },
+        "move_ne": { "frames": [{ "path": "assets/characters/dante/dante_walk_ne.png" }] }
       }
     }
   },
