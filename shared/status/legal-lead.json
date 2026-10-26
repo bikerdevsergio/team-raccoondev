@@ -1,0 +1,8 @@
+{
+  "agent": "legal-lead",
+  "state": "idle",
+  "currentTask": null,
+  "lastUpdated": "2026-10-26T13:13:42.225Z",
+  "pendingEscalations": 0,
+  "upcomingDeadlines": 0
+}

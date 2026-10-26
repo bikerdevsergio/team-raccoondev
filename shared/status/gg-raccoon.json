@@ -2,37 +2,37 @@
   "agent": "gg-raccoon",
   "state": "idle",
   "currentTask": null,
-  "lastUpdated": "2026-10-15T17:44:19.899Z",
+  "lastUpdated": "2026-10-26T13:17:54.391Z",
   "team": [
     {
       "agent": "gg-raccoon",
       "state": "idle",
       "currentTask": null,
-      "lastUpdated": "2026-10-15T00:00:00.000Z"
+      "lastUpdated": "2026-10-15T17:44:19.899Z"
     },
     {
       "agent": "finance-lead",
-      "state": "unknown",
+      "state": "idle",
       "currentTask": null,
-      "lastUpdated": null
+      "lastUpdated": "2026-10-15T18:42:35.802Z"
     },
     {
       "agent": "fullstack-dev",
-      "state": "unknown",
+      "state": "idle",
       "currentTask": null,
-      "lastUpdated": null
+      "lastUpdated": "2026-10-16T23:36:36.923Z"
     },
     {
       "agent": "legal-lead",
-      "state": "unknown",
+      "state": "idle",
       "currentTask": null,
-      "lastUpdated": null
+      "lastUpdated": "2026-10-26T13:13:42.225Z"
     },
     {
       "agent": "marketing-lead",
-      "state": "unknown",
+      "state": "idle",
       "currentTask": null,
-      "lastUpdated": null
+      "lastUpdated": "2026-10-17T00:38:08.038Z"
     }
   ],
   "pendingApprovals": [],
