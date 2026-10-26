@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RaccoonDev HQ</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; background: #0b0c14; color: #dfe6f3;
+    font-family: "Courier New", monospace; display: flex; flex-direction: column; align-items: center;
+    padding: 24px 12px;
+  }
+  h1 { font-size: 1.4rem; letter-spacing: 3px; color: #ff3fa0; text-shadow: 0 0 12px #ff3fa066; margin: 0 0 4px; }
+  p.sub { color: #7d84a3; margin: 0 0 16px; font-size: 0.8rem; }
+  #world-wrap { border: 2px solid #272a3d; border-radius: 10px; overflow: hidden; box-shadow: 0 0 40px -10px #ff3fa044; }
+  #world { display: block; cursor: pointer; image-rendering: pixelated; }
+  #roster { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
+  .chip {
+    background: #13141f; border: 1px solid #272a3d; border-radius: 8px; padding: 8px 12px;
+    font-size: 0.78rem; cursor: pointer; display: flex; align-items: center; gap: 6px;
+  }
+  .chip:hover { border-color: #39e6ff; }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; }
+  #panel {
+    position: fixed; right: 0; top: 0; height: 100%; width: min(380px, 100vw);
+    background: #0d0e17; border-left: 1px solid #272a3d; transform: translateX(100%);
+    transition: transform 0.25s ease; display: flex; flex-direction: column; padding: 16px;
+  }
+  #panel.open { transform: translateX(0); }
+  #panel h2 { margin: 0 0 4px; font-size: 1.1rem; }
+  #panel .role { color: #39e6ff; font-size: 0.75rem; margin-bottom: 12px; }
+  #panel-close { position: absolute; top: 12px; right: 12px; background: none; border: none; color: #7d84a3; font-size: 1.2rem; cursor: pointer; }
+  #call-btn {
+    background: #1a1c2b; border: 1px solid #ff3fa0; color: #ff3fa0; border-radius: 6px;
+    padding: 10px; font-family: inherit; cursor: pointer; margin-bottom: 12px;
+  }
+  #call-btn:disabled { opacity: 0.4; cursor: default; }
+  #chat-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .msg { padding: 8px 10px; border-radius: 8px; font-size: 0.82rem; max-width: 90%; overflow-wrap: anywhere; }
+  .msg.user { align-self: flex-end; background: #272a3d; }
+  .msg.agent { align-self: flex-start; background: #1a1c2b; border: 1px solid #272a3d; }
+  .msg .file-chip { display: inline-block; background: #0d0e17; border: 1px solid #39e6ff; border-radius: 4px; padding: 2px 6px; font-size: 0.7rem; margin-top: 4px; }
+  #attachments { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  #attachments .att { background: #1a1c2b; border: 1px solid #272a3d; border-radius: 4px; padding: 3px 6px; font-size: 0.7rem; }
+  #chat-form { display: flex; gap: 6px; }
+  #chat-input {
+    flex: 1; background: #13141f; border: 1px solid #272a3d; color: #dfe6f3;
+    border-radius: 6px; padding: 8px; font-family: inherit; resize: none;
+  }
+  #attach-btn, #send-btn {
+    background: #13141f; border: 1px solid #272a3d; color: #dfe6f3; border-radius: 6px;
+    cursor: pointer; padding: 0 10px; font-family: inherit;
+  }
+  #send-btn { color: #39e6ff; border-color: #39e6ff; }
+  .loading-chat { color: #7d84a3; font-style: italic; font-size: 0.78rem; }
+</style>
+</head>
+<body>
+  <h1>RACCOONDEV HQ</h1>
+  <p class="sub">Clic en un mapache, o elegilo abajo, para llamarlo a tu oficina</p>
+  <div id="world-wrap"><div id="world"></div></div>
+  <div id="roster"></div>
+
+  <div id="panel">
+    <button id="panel-close">✕</button>
+    <h2 id="panel-name"></h2>
+    <div class="role" id="panel-role"></div>
+    <button id="call-btn">📣 Llamar a mi oficina</button>
+    <div id="chat-log"></div>
+    <div id="attachments"></div>
+    <form id="chat-form">
+      <input type="file" id="file-input" multiple hidden accept="image/*,.pdf,.txt,.md,.js,.ts,.py,.json,.html,.css" />
+      <button type="button" id="attach-btn">📎</button>
+      <textarea id="chat-input" rows="1" placeholder="Escribile algo..."></textarea>
+      <button type="submit" id="send-btn">➤</button>
+    </form>
+  </div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

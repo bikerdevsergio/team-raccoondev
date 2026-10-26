@@ -6,7 +6,7 @@ Sistema multi-agente autónomo para una consultora low-code. Cada agente es un m
 
 RaccoonDev funciona como una empresa de software operada por agentes: un Gerente General que orquesta, y leads especializados en finanzas, desarrollo, legal y marketing. El objetivo es que el equipo pueda operar 24/7 sin depender de la disponibilidad del CEO, con trazabilidad completa de cada decisión.
 
-**Los 5 agentes del sistema están completos** (62 funciones aprobadas y codeadas en total). La **PWA** (Fase 1: lobby + 6 oficinas) ya está funcionando — ver [`pwa/README.md`](pwa/README.md) para correrla localmente.
+**Los 5 agentes del sistema están completos** (62 funciones aprobadas y codeadas en total). La **PWA** es un mundo pixel art real sobre el motor open source [Miniverse](https://github.com/ianscott313/miniverse): los agentes son mapaches animados, con chat propio (texto + imagen/PDF/código) y acción de "llamar a mi oficina" — ver [`pwa/README.md`](pwa/README.md) para correrla localmente.
 
 ## Agentes
 
