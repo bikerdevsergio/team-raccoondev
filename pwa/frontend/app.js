@@ -1,10 +1,12 @@
+import { doorScene, officeScene } from "./scenes.js";
+
 const OFFICES = [
-  { id: "ceo", name: "Sergi", role: "CEO", icon: "👑" },
-  { id: "gg-raccoon", name: "Dante", role: "Gerente General", icon: "🗂️" },
-  { id: "finance-lead", name: "Midas", role: "Lead de Finanzas", icon: "💰" },
-  { id: "fullstack-dev", name: "Volt", role: "CTO", icon: "💻" },
-  { id: "legal-lead", name: "Themis", role: "Lead Legal", icon: "⚖️" },
-  { id: "marketing-lead", name: "Hermes", role: "Lead de Marketing", icon: "📣" },
+  { id: "ceo", name: "Sergi", role: "CEO", icon: "👑", accent: "#ffcc4d" },
+  { id: "gg-raccoon", name: "Dante", role: "Gerente General", icon: "🗂️", accent: "#ff3fa0" },
+  { id: "finance-lead", name: "Midas", role: "Lead de Finanzas", icon: "💰", accent: "#f3d978" },
+  { id: "fullstack-dev", name: "Volt", role: "CTO", icon: "💻", accent: "#39e6ff" },
+  { id: "legal-lead", name: "Themis", role: "Lead Legal", icon: "⚖️", accent: "#b388ff" },
+  { id: "marketing-lead", name: "Hermes", role: "Lead de Marketing", icon: "📣", accent: "#ff7a59" },
 ];
 
 const LABELS = {
@@ -31,7 +33,7 @@ function stateClass(state) {
 }
 
 function officeFor(id) {
-  return OFFICES.find((o) => o.id === id) ?? { id, name: id, role: "", icon: "🚪" };
+  return OFFICES.find((o) => o.id === id) ?? { id, name: id, role: "", icon: "🚪", accent: "#5a6080" };
 }
 
 function pillHtml(state) {
@@ -52,22 +54,19 @@ function renderLobby(container, teamStatuses) {
       <h1>RACCOONDEV HQ</h1>
       <p>Elegí una oficina</p>
     </div>
-    <div class="doors">
+    <div class="hallway">
       ${OFFICES.map((o) => {
         const state = o.id === "ceo" ? "ok" : stateById[o.id] ?? "unknown";
         return `
-          <button class="door" data-office="${o.id}">
-            <span class="icon">${o.icon}</span>
-            <span class="name">${o.name}</span>
-            <span class="role">${o.role}</span>
-            <div class="door-state">${pillHtml(state)}</div>
+          <button class="door-btn" data-office="${o.id}" aria-label="Entrar a la oficina de ${o.name}">
+            ${doorScene({ name: o.name, icon: o.icon, state })}
           </button>
         `;
       }).join("")}
     </div>
   `;
 
-  container.querySelectorAll(".door").forEach((btn) => {
+  container.querySelectorAll(".door-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       location.hash = `#office/${btn.dataset.office}`;
     });
@@ -96,51 +95,53 @@ function describeItem(item) {
   return item.title ?? item.description ?? item.name ?? JSON.stringify(item);
 }
 
+function hudBadge(value, label) {
+  return `<div class="hud-badge"><span class="hud-value">${value}</span><span class="hud-label">${label}</span></div>`;
+}
+
+function wireOfficeChrome(container, office) {
+  container.querySelector("#back").addEventListener("click", () => {
+    location.hash = "#lobby";
+  });
+  const terminalBtn = container.querySelector("#open-terminal");
+  const terminal = container.querySelector(".terminal");
+  if (terminalBtn && terminal) {
+    terminalBtn.addEventListener("click", () => terminal.classList.toggle("open"));
+    terminal.querySelector(".terminal-close")?.addEventListener("click", () => terminal.classList.remove("open"));
+  }
+}
+
 function renderCeoOffice(container, data) {
   const office = officeFor("ceo");
   const idleCount = data.team.filter((t) => t.state === "idle").length;
 
   container.innerHTML = `
-    <button class="back-btn" id="back">&larr; Volver al lobby</button>
-    <div class="office-header">
-      <span class="icon">${office.icon}</span>
-      <div>
-        <h1>${office.name}</h1>
-        <div class="role">${office.role} — vista general de todo el equipo</div>
+    <button class="back-btn" id="back">&larr; Volver al pasillo</button>
+    <div class="scene-wrap" style="--accent:${office.accent}">
+      ${officeScene({ officeId: office.id, accent: office.accent, icon: office.icon })}
+      <div class="scene-caption">
+        <span class="icon">${office.icon}</span>
+        <div><h1>${office.name}</h1><div class="role">${office.role}</div></div>
+      </div>
+      <div class="hud-bar">
+        ${hudBadge(`${idleCount}/${data.team.length}`, "Idle")}
+        ${hudBadge(data.pendingApprovals.length, "Aprobaciones")}
+        ${hudBadge(data.pendingEscalations.length, "Escalaciones")}
+        ${hudBadge(data.frozenConflicts.length, "Conflictos")}
+        <button class="hud-badge hud-button" id="open-terminal">🖥️ Ver detalle</button>
       </div>
     </div>
 
-    <div class="stat-grid">
-      <div class="stat-tile"><div class="value">${idleCount}/${data.team.length}</div><div class="label">Agentes idle</div></div>
-      <div class="stat-tile"><div class="value">${data.pendingApprovals.length}</div><div class="label">Aprobaciones pendientes</div></div>
-      <div class="stat-tile"><div class="value">${data.pendingEscalations.length}</div><div class="label">Escalaciones pendientes</div></div>
-      <div class="stat-tile"><div class="value">${data.frozenConflicts.length}</div><div class="label">Conflictos congelados</div></div>
+    <div class="terminal">
+      <div class="terminal-header"><span>TERMINAL — ${office.name}</span><button class="terminal-close">✕</button></div>
+      <section class="panel"><h2>Equipo</h2>${renderAgentGrid(data.team)}</section>
+      <section class="panel"><h2>Aprobaciones pendientes</h2>${renderStatList(data.pendingApprovals, "Sin aprobaciones pendientes", (i) => `<li>${describeItem(i)}</li>`)}</section>
+      <section class="panel"><h2>Escalaciones esperando al CEO</h2>${renderStatList(data.pendingEscalations, "Sin escalaciones pendientes", (i) => `<li>${describeItem(i)}</li>`)}</section>
+      <section class="panel"><h2>Conflictos congelados</h2>${renderStatList(data.frozenConflicts, "Sin conflictos activos", (i) => `<li>${describeItem(i)}</li>`)}</section>
     </div>
-
-    <section class="panel">
-      <h2>Equipo</h2>
-      ${renderAgentGrid(data.team)}
-    </section>
-
-    <section class="panel">
-      <h2>Aprobaciones pendientes</h2>
-      ${renderStatList(data.pendingApprovals, "Sin aprobaciones pendientes", (i) => `<li>${describeItem(i)}</li>`)}
-    </section>
-
-    <section class="panel">
-      <h2>Escalaciones esperando al CEO</h2>
-      ${renderStatList(data.pendingEscalations, "Sin escalaciones pendientes", (i) => `<li>${describeItem(i)}</li>`)}
-    </section>
-
-    <section class="panel">
-      <h2>Conflictos congelados</h2>
-      ${renderStatList(data.frozenConflicts, "Sin conflictos activos", (i) => `<li>${describeItem(i)}</li>`)}
-    </section>
   `;
 
-  container.querySelector("#back").addEventListener("click", () => {
-    location.hash = "#lobby";
-  });
+  wireOfficeChrome(container, office);
 }
 
 function renderAgentOffice(container, officeId, data) {
@@ -155,45 +156,39 @@ function renderAgentOffice(container, officeId, data) {
   }
 
   container.innerHTML = `
-    <button class="back-btn" id="back">&larr; Volver al lobby</button>
-    <div class="office-header">
-      <span class="icon">${office.icon}</span>
-      <div>
-        <h1>${office.name}</h1>
-        <div class="role">${office.role}</div>
+    <button class="back-btn" id="back">&larr; Volver al pasillo</button>
+    <div class="scene-wrap" style="--accent:${office.accent}">
+      ${officeScene({ officeId: office.id, accent: office.accent, icon: office.icon })}
+      <div class="scene-caption">
+        <span class="icon">${office.icon}</span>
+        <div><h1>${office.name}</h1><div class="role">${office.role}</div></div>
+        ${pillHtml(data.state ?? "unknown")}
       </div>
-      ${pillHtml(data.state ?? "unknown")}
+      <div class="hud-bar">
+        ${scalarEntries.map(([k, v]) => hudBadge(v, humanize(k))).join("")}
+        <button class="hud-badge hud-button" id="open-terminal">🖥️ Ver detalle</button>
+      </div>
     </div>
 
-    ${scalarEntries.length
-      ? `<div class="stat-grid">${scalarEntries
-          .map(([k, v]) => `<div class="stat-tile"><div class="value">${v}</div><div class="label">${humanize(k)}</div></div>`)
-          .join("")}</div>`
-      : ""}
-
-    ${data.currentTask ? `<section class="panel"><h2>Tarea actual</h2><p>${data.currentTask}</p></section>` : ""}
-
-    ${listEntries
-      .map(
-        ([key, items]) => `
-      <section class="panel">
-        <h2>${humanize(key)}</h2>
-        ${key === "team"
-          ? renderAgentGrid(items)
-          : renderStatList(items, "Sin ítems", (i) => `<li>${describeItem(i)}</li>`)}
-      </section>
-    `
-      )
-      .join("")}
-
-    <p style="color: var(--text-dim); font-size: 0.75rem; margin-top: 24px;">
-      Última actualización: ${data.lastUpdated ? new Date(data.lastUpdated).toLocaleString("es-AR") : "sin datos"}
-    </p>
+    <div class="terminal">
+      <div class="terminal-header"><span>TERMINAL — ${office.name}</span><button class="terminal-close">✕</button></div>
+      ${data.currentTask ? `<section class="panel"><h2>Tarea actual</h2><p>${data.currentTask}</p></section>` : ""}
+      ${listEntries
+        .map(
+          ([key, items]) => `
+        <section class="panel">
+          <h2>${humanize(key)}</h2>
+          ${key === "team" ? renderAgentGrid(items) : renderStatList(items, "Sin ítems", (i) => `<li>${describeItem(i)}</li>`)}
+        </section>`
+        )
+        .join("")}
+      <p style="color: var(--text-dim); font-size: 0.75rem;">
+        Última actualización: ${data.lastUpdated ? new Date(data.lastUpdated).toLocaleString("es-AR") : "sin datos"}
+      </p>
+    </div>
   `;
 
-  container.querySelector("#back").addEventListener("click", () => {
-    location.hash = "#lobby";
-  });
+  wireOfficeChrome(container, office);
 }
 
 async function renderRoute() {
