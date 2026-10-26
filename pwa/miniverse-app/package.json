@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node scripts/start-all.mjs",
-    "sprites": "node scripts/generate-sprites.mjs && node scripts/generate-tiles.mjs"
+    "sprites": "node scripts/generate-sprites.mjs && node scripts/generate-tiles.mjs && node scripts/generate-props.mjs"
   },
   "keywords": [],
   "author": "",

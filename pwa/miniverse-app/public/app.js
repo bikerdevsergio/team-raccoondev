@@ -30,25 +30,58 @@ function walkSpriteConfig(id) {
 }
 
 const COLS = 12;
-const ROWS = 8;
+const ROWS = 11;
 const TILE = 32;
+const DESK_ROW = 2;
+const WALL_ROW = 0;
+const CURB_ROW = 5;
+const PARKING_ROWS = [6, 7, 8, 9, 10];
+const MOTO_ROW = 8;
+const DESK_COLS = [1, 3, 5, 7, 9];
+const CEO_MOTO_COL = 11;
 
 const locations = {
-  ceo_desk: { x: 5, y: 5, label: "Tu oficina" },
+  ceo_desk: { x: 5, y: 4, label: "Tu oficina" },
 };
 OFFICES.forEach((o, i) => {
-  locations[`${o.id}_desk`] = { x: 1 + i * 2, y: 1, label: o.name };
+  locations[`${o.id}_desk`] = { x: DESK_COLS[i], y: DESK_ROW, label: o.name };
 });
 
-const floorRow = () => Array.from({ length: COLS }, () => "floor");
+const layer = Array.from({ length: ROWS }, (_, y) => {
+  if (y === WALL_ROW) return Array.from({ length: COLS }, () => "wall");
+  if (y === CURB_ROW) return Array.from({ length: COLS }, () => "curb");
+  if (PARKING_ROWS.includes(y)) {
+    return Array.from({ length: COLS }, (_, x) => {
+      if (y === MOTO_ROW) {
+        if (x === CEO_MOTO_COL) return "moto_ceo";
+        const idx = DESK_COLS.indexOf(x);
+        if (idx !== -1) return `moto_${OFFICES[idx].id}`;
+      }
+      return "pavement";
+    });
+  }
+  return Array.from({ length: COLS }, () => "floor");
+});
+
+const walkable = Array.from({ length: ROWS }, (_, y) =>
+  Array.from({ length: COLS }, () => y !== WALL_ROW)
+);
+
 const sceneConfig = {
   name: "raccoondev-hq",
   tileWidth: TILE,
   tileHeight: TILE,
-  layers: [Array.from({ length: ROWS }, floorRow)],
-  walkable: Array.from({ length: ROWS }, () => Array.from({ length: COLS }, () => true)),
+  layers: [layer],
+  walkable,
   locations,
-  tiles: { floor: "/tiles/floor.png" },
+  tiles: {
+    floor: "/tiles/floor.png",
+    wall: "/tiles/wall.png",
+    curb: "/tiles/curb.png",
+    pavement: "/tiles/pavement.png",
+    ...Object.fromEntries(OFFICES.map((o) => [`moto_${o.id}`, `/tiles/moto_${o.id}.png`])),
+    moto_ceo: "/tiles/moto_ceo.png",
+  },
 };
 
 const spriteSheets = Object.fromEntries(OFFICES.map((o) => [o.id, walkSpriteConfig(o.id)]));

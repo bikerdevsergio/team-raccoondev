@@ -51,69 +51,71 @@ function drawFrame(direction, legOffset, accent) {
   };
 
   const cx = 16;
-  const earY = 7;
-  const headCy = 12;
-  const bodyCy = 21;
+  const earY = 11;
+  const headCy = 15;
+  const bodyCy = 23;
   const sideFlip = direction === "left" ? -1 : 1;
   const isSide = direction === "left" || direction === "right";
-  const earDx = isSide ? 3 * sideFlip : 6;
+  const earDx = isSide ? 2.2 * sideFlip : 4.5;
+  const HEAD_RX = 5.6, HEAD_RY = 5.2;
+  const BODY_RX = 6, BODY_RY = 6.5;
 
   // cola (detrás del cuerpo): franjas claro/oscuro alternadas, estilo mapache
   if (direction === "up") {
     for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) {
-      if (inEllipse(x, y, cx, bodyCy + 10, 4.5, 7)) set(x, y, (y - (bodyCy + 4)) % 4 < 2 ? BODY_SHADOW : TAIL_LIGHT);
+      if (inEllipse(x, y, cx, bodyCy + 7.5, 3.4, 5.2)) set(x, y, (y - (bodyCy + 3)) % 3 < 1.5 ? BODY_SHADOW : TAIL_LIGHT);
     }
   }
   if (isSide) {
-    const tx = cx + 7 * sideFlip;
+    const tx = cx + 5.2 * sideFlip;
     for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) {
-      if (inEllipse(x, y, tx, bodyCy + 3, 3.5, 8)) set(x, y, (y - bodyCy) % 4 < 2 ? BODY_SHADOW : TAIL_LIGHT);
+      if (inEllipse(x, y, tx, bodyCy + 2.2, 2.6, 6)) set(x, y, (y - bodyCy) % 3 < 1.5 ? BODY_SHADOW : TAIL_LIGHT);
     }
   }
 
   for (let y = 0; y < GRID; y++) {
     for (let x = 0; x < GRID; x++) {
       // cuerpo
-      if (inEllipse(x, y, cx, bodyCy, 8, 9)) set(x, y, BODY);
+      if (inEllipse(x, y, cx, bodyCy, BODY_RX, BODY_RY)) set(x, y, BODY);
       // cabeza
-      if (inEllipse(x, y, cx, headCy, 7.5, 7)) set(x, y, BODY);
+      if (inEllipse(x, y, cx, headCy, HEAD_RX, HEAD_RY)) set(x, y, BODY);
       // orejas (dos triángulos, en vista lateral se solapan -> una visible)
-      if (inTriangle(x, y, [cx - earDx - 3, earY + 4], [cx - earDx, earY - 4], [cx - earDx + 3, earY + 4])) set(x, y, BODY_SHADOW);
-      if (!isSide && inTriangle(x, y, [cx + earDx - 3, earY + 4], [cx + earDx, earY - 4], [cx + earDx + 3, earY + 4])) set(x, y, BODY_SHADOW);
+      if (inTriangle(x, y, [cx - earDx - 2.2, earY + 3], [cx - earDx, earY - 3], [cx - earDx + 2.2, earY + 3])) set(x, y, BODY_SHADOW);
+      if (!isSide && inTriangle(x, y, [cx + earDx - 2.2, earY + 3], [cx + earDx, earY - 3], [cx + earDx + 2.2, earY + 3])) set(x, y, BODY_SHADOW);
     }
   }
 
   // antifaz + hocico + ojos (de frente) / nuca lisa (de espaldas) / perfil (costado)
   if (direction === "down") {
     for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) {
-      if (inEllipse(x, y, cx, headCy + 1, 7, 3.6)) set(x, y, MASK);
-      if (inEllipse(x, y, cx, headCy + 4, 4, 3)) set(x, y, MUZZLE);
+      if (inEllipse(x, y, cx, headCy + 0.8, 5.2, 2.7)) set(x, y, MASK);
+      if (inEllipse(x, y, cx, headCy + 3, 3, 2.3)) set(x, y, MUZZLE);
     }
-    set(cx, headCy + 4, NOSE);
-    set(cx - 3.5 | 0, headCy, accent); set(cx - 3 | 0, headCy, accent);
-    set(cx + 3 | 0, headCy, accent); set(cx + 3.5 | 0, headCy, accent);
+    set(cx, headCy + 3, NOSE);
+    set(Math.round(cx - 2.6), headCy, accent); set(Math.round(cx - 2.2), headCy, accent);
+    set(Math.round(cx + 2.2), headCy, accent); set(Math.round(cx + 2.6), headCy, accent);
   } else if (direction === "up") {
     for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) {
-      if (inEllipse(x, y, cx, headCy - 3, 6, 4)) set(x, y, BODY_SHADOW);
+      if (inEllipse(x, y, cx, headCy - 2.2, 4.4, 3)) set(x, y, BODY_SHADOW);
     }
   } else {
-    const ox = 4 * sideFlip;
+    const ox = 3 * sideFlip;
     for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) {
-      if (inEllipse(x, y, cx + ox, headCy + 1, 4.5, 3.6)) set(x, y, MASK);
-      if (inEllipse(x, y, cx + ox + 2 * sideFlip, headCy + 3, 3, 2.6)) set(x, y, MUZZLE);
+      if (inEllipse(x, y, cx + ox, headCy + 0.8, 3.3, 2.7)) set(x, y, MASK);
+      if (inEllipse(x, y, cx + ox + 1.5 * sideFlip, headCy + 2.2, 2.2, 1.9)) set(x, y, MUZZLE);
     }
-    set(Math.round(cx + ox + 2 * sideFlip), headCy + 3, NOSE);
+    set(Math.round(cx + ox + 1.5 * sideFlip), headCy + 2.2, NOSE);
     set(Math.round(cx + ox * 1.3), headCy, accent);
   }
 
   // collar / banda de acento
-  for (let x = cx - 8; x <= cx + 8; x++) set(x, bodyCy - 7, accent);
+  for (let x = Math.round(cx - BODY_RX); x <= Math.round(cx + BODY_RX); x++) set(x, Math.round(bodyCy - 5), accent);
 
   // patas (alternan con el ciclo de caminata)
-  const footY = 29;
-  const spread = 5;
-  set(cx - spread + legOffset, footY, BODY_SHADOW); set(cx - spread + legOffset, footY - 1, BODY_SHADOW);
-  set(cx + spread - legOffset, footY, BODY_SHADOW); set(cx + spread - legOffset, footY - 1, BODY_SHADOW);
+  const footY = Math.round(bodyCy + BODY_RY - 1);
+  const spread = 3.6;
+  set(Math.round(cx - spread + legOffset), footY, BODY_SHADOW); set(Math.round(cx - spread + legOffset), footY - 1, BODY_SHADOW);
+  set(Math.round(cx + spread - legOffset), footY, BODY_SHADOW); set(Math.round(cx + spread - legOffset), footY - 1, BODY_SHADOW);
 
   return px;
 }
