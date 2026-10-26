@@ -11,6 +11,7 @@ const LABEL_KEEP_FRACTION = 0.8; // recorta el texto de la etiqueta abajo de cad
 const BG_TOLERANCE = 28; // distancia de color para considerar "fondo"
 const BG_FEATHER = 20; // banda de transición suave para evitar bordes dentados
 const CELL_INSET = 16; // px a descartar de cada borde de celda (evita las líneas divisorias de la grilla)
+const FIRST_COL_EXTRA_LEFT_INSET = 80; // la columna 0 (SE) suele tener una etiqueta vertical rotada ("STANDING IDLE") pisando el lado izquierdo
 
 function colorDistance(r, g, b, br, bg, bb) {
   const dr = r - br, dg = g - bg, db = b - bb;
@@ -52,11 +53,12 @@ export async function processCharacterSheet(inputPath, characterId, outDir) {
 
   for (let row = 0; row < ROWS.length; row++) {
     for (let col = 0; col < DIRECTIONS.length; col++) {
-      const left = col * cellW + CELL_INSET;
+      const extraLeft = col === 0 ? FIRST_COL_EXTRA_LEFT_INSET : 0;
+      const left = col * cellW + CELL_INSET + extraLeft;
       const top = row * cellH + CELL_INSET;
 
       const { data, info } = await sharp(inputPath)
-        .extract({ left, top, width: cellW - CELL_INSET * 2, height: cropH - CELL_INSET })
+        .extract({ left, top, width: cellW - CELL_INSET * 2 - extraLeft, height: cropH - CELL_INSET })
         .raw()
         .ensureAlpha()
         .toBuffer({ resolveWithObject: true });

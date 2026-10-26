@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<title>RaccoonDev HQ — prueba isométrica</title>
+<title>RaccoonDev HQ — prueba isométrica (6 personajes)</title>
 <style>
   body { margin: 0; background: #0b0c14; }
 </style>
@@ -11,22 +11,64 @@
 </head>
 <body>
 <script>
-  const pixiRoot = new PIXI.Application({ width: 800, height: 600, backgroundColor: 0x0b0c14 });
+  const pixiRoot = new PIXI.Application({ width: 1200, height: 700, backgroundColor: 0x0b0c14 });
   document.body.appendChild(pixiRoot.view);
 
   const instanceConfig = {
     mapDataPath: "mapData.json",
     assetsToLoad: [
-      "assets/t_floor.png", "assets/o_desk.png", "assets/tileHighlight.png",
-      "assets/characters/dante/dante_stand_se.png",
-      "assets/characters/dante/dante_stand_sw.png",
-      "assets/characters/dante/dante_stand_nw.png",
-      "assets/characters/dante/dante_stand_ne.png",
-      "assets/characters/dante/dante_walk_se.png",
-      "assets/characters/dante/dante_walk_sw.png",
-      "assets/characters/dante/dante_walk_nw.png",
-      "assets/characters/dante/dante_walk_ne.png",
-    ],
+  "assets/t_floor.png",
+  "assets/o_desk.png",
+  "assets/tileHighlight.png",
+  "assets/characters/dante/dante_stand_se.png",
+  "assets/characters/dante/dante_walk_se.png",
+  "assets/characters/dante/dante_stand_sw.png",
+  "assets/characters/dante/dante_walk_sw.png",
+  "assets/characters/dante/dante_stand_nw.png",
+  "assets/characters/dante/dante_walk_nw.png",
+  "assets/characters/dante/dante_stand_ne.png",
+  "assets/characters/dante/dante_walk_ne.png",
+  "assets/characters/midas/midas_stand_se.png",
+  "assets/characters/midas/midas_walk_se.png",
+  "assets/characters/midas/midas_stand_sw.png",
+  "assets/characters/midas/midas_walk_sw.png",
+  "assets/characters/midas/midas_stand_nw.png",
+  "assets/characters/midas/midas_walk_nw.png",
+  "assets/characters/midas/midas_stand_ne.png",
+  "assets/characters/midas/midas_walk_ne.png",
+  "assets/characters/volt/volt_stand_se.png",
+  "assets/characters/volt/volt_walk_se.png",
+  "assets/characters/volt/volt_stand_sw.png",
+  "assets/characters/volt/volt_walk_sw.png",
+  "assets/characters/volt/volt_stand_nw.png",
+  "assets/characters/volt/volt_walk_nw.png",
+  "assets/characters/volt/volt_stand_ne.png",
+  "assets/characters/volt/volt_walk_ne.png",
+  "assets/characters/themis/themis_stand_se.png",
+  "assets/characters/themis/themis_walk_se.png",
+  "assets/characters/themis/themis_stand_sw.png",
+  "assets/characters/themis/themis_walk_sw.png",
+  "assets/characters/themis/themis_stand_nw.png",
+  "assets/characters/themis/themis_walk_nw.png",
+  "assets/characters/themis/themis_stand_ne.png",
+  "assets/characters/themis/themis_walk_ne.png",
+  "assets/characters/hermes/hermes_stand_se.png",
+  "assets/characters/hermes/hermes_walk_se.png",
+  "assets/characters/hermes/hermes_stand_sw.png",
+  "assets/characters/hermes/hermes_walk_sw.png",
+  "assets/characters/hermes/hermes_stand_nw.png",
+  "assets/characters/hermes/hermes_walk_nw.png",
+  "assets/characters/hermes/hermes_stand_ne.png",
+  "assets/characters/hermes/hermes_walk_ne.png",
+  "assets/characters/ceo/ceo_stand_se.png",
+  "assets/characters/ceo/ceo_walk_se.png",
+  "assets/characters/ceo/ceo_stand_sw.png",
+  "assets/characters/ceo/ceo_walk_sw.png",
+  "assets/characters/ceo/ceo_stand_nw.png",
+  "assets/characters/ceo/ceo_walk_nw.png",
+  "assets/characters/ceo/ceo_stand_ne.png",
+  "assets/characters/ceo/ceo_walk_ne.png"
+],
   };
 
   const engine = TRAVISO.getEngineInstance(instanceConfig);
