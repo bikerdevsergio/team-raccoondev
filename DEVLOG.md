@@ -276,3 +276,8 @@ El CEO pidió revisar seguridad por las vulnerabilidades recientes en Node.js/Py
   - Cada oficina tiene su propio color de acento (CEO dorado, Dante magenta, Midas amarillo, Volt cian, Themis violeta, Hermes naranja) para que se distingan a simple vista.
   - Los datos (antes mostrados como tarjetas de dashboard) ahora son una barra HUD compacta sobre la escena + un panel "TERMINAL" desplegable con el detalle completo — la escena ilustrada es el contenido principal, los datos quedan secundarios.
 - Probado con Playwright: pasillo con las 6 puertas + motos, oficina de Midas (con monedas) y del CEO (con trofeo), panel terminal abriendo/cerrando — 0 errores de consola.
+
+## 2026-10-26 — Fix: Service Worker servía la PWA vieja (cache stale)
+- El CEO reportó que después del rediseño seguía viendo el look anterior (tarjetas de dashboard). Causa: el Service Worker (`sw.js`) usaba estrategia "cache primero" para los assets propios — servía `app.js`/`styles.css`/`index.html` cacheados de la Fase 1, sin volver a pedirlos a la red aunque el servidor ya tuviera los archivos nuevos.
+- **Fix:** estrategia cambiada a "red primero" para los assets propios (la caché queda solo como fallback sin conexión), `CACHE_NAME` incrementado a v2 para forzar la detección de actualización, y agregado `skipWaiting()` + `clients.claim()` para que el SW nuevo tome control sin esperar a que se cierren todas las pestañas.
+- Verificado que el servidor ya sirve `sw.js` v2. Le pedí al CEO que haga un refresh forzado (Ctrl+Shift+R), potencialmente dos veces, para que el navegador instale y active el SW nuevo.
